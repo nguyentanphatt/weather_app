@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 class WeatherPage extends StatelessWidget {
   const WeatherPage({super.key,
     required this.background,
-    required this.animation,
+    this.animation,
     required this.content,
   });
 
   final Widget background;
-  final Widget animation;
+  final Widget? animation;
   final Widget content;
 
   @override
@@ -18,7 +18,7 @@ class WeatherPage extends StatelessWidget {
       body: Stack(
         children: [
           background,
-          animation,
+          if (animation != null) animation!,
           content,
         ],
       ),

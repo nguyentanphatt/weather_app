@@ -2,8 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_app/views/widgets/glass_card_widget.dart';
 
+final localTime = DateTime.now();
+int hour = localTime.hour;
+int minute = localTime.minute;
+
 class TopContentWidget extends StatelessWidget {
   const TopContentWidget({super.key});
+
+  String formatHour(int hour, int minute) {
+    int displayHour = hour % 12;
+    displayHour = displayHour == 0 ? 12 : displayHour;
+    String period = hour >= 12 ? "PM" : "AM";
+    String displayMinute = minute.toString().padLeft(2, '0');
+    return "$displayHour:$displayMinute $period";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +29,7 @@ class TopContentWidget extends StatelessWidget {
               style: GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
             ),
             Text(
-              "12:00 PM",
+              formatHour(hour, minute),
               style: GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
             ),
           ],

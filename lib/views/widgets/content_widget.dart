@@ -13,12 +13,8 @@ class ContentWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 60.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TopContentWidget(),
-            BottomContentWidget()
-          ],
+          children: [TopContentWidget(), BottomContentWidget()],
         ),
-      
       ),
     );
   }
