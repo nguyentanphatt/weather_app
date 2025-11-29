@@ -1,6 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:weather_app/views/animations/star_animation.dart';
 import 'package:weather_app/views/backgrounds/background.dart';
+import 'package:weather_app/views/widgets/content_widget.dart';
 
 class SunnyPage extends StatelessWidget {
   const SunnyPage({super.key});
@@ -15,40 +17,8 @@ class SunnyPage extends StatelessWidget {
             secondColor: Color(0xFFFFB6A1),
             thirdColor: Color(0xFFFFDFAF),
           ),
-          SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 60),
-                  Text("Gò Vấp", style: TextStyle(),),
-                  Row(
-                    children: [
-                      Text(
-                        "40",
-                        style: TextStyle(
-                          fontSize: 96,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "°",
-                        style: TextStyle(
-                          fontSize: 96,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text("Quang"),
-                ],
-              ),
-            ),
-          ),
+          //animation
+          ContentWidget()
         ],
       ),
     );
