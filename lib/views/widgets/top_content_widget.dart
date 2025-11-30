@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:weather_app/views/animations/windchime.dart';
 import 'package:weather_app/views/models/weather_models.dart';
+import 'package:weather_app/views/pages/search_page.dart';
 import 'package:weather_app/views/widgets/glass_card_widget.dart';
 
 final localTime = DateTime.now();
@@ -24,6 +25,29 @@ class TopContentWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          trailing: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SearchPage();
+                  },
+                ),
+              );
+            },
+            child: Icon(
+              Icons.add,
+              size: 30,
+              color: Colors.white,
+              weight: 10,
+              grade: 200,
+              opticalSize: 48,
+            ),
+          ),
+        ),
         Row(
           children: [
             Text(
@@ -96,11 +120,8 @@ class TopContentWidget extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 10,),
-        WindChime(
-          windSpeed: weather.windSpeed,
-          size: 50, 
-        ),
+        SizedBox(height: 10),
+        WindChime(windSpeed: weather.windSpeed, size: 50),
       ],
     );
   }
