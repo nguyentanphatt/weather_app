@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class StarBlinkingAnimation extends StatefulWidget {
-  final int starCount; // số lượng sao
+  final int starCount;
   const StarBlinkingAnimation({super.key, this.starCount = 50});
 
   @override
@@ -20,7 +20,7 @@ class _StarBlinkingAnimationState extends State<StarBlinkingAnimation>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
     )..repeat(reverse: true);
 
     _stars = List.generate(widget.starCount, (_) => Star.random());
@@ -37,7 +37,7 @@ class _StarBlinkingAnimationState extends State<StarBlinkingAnimation>
     return IgnorePointer(
       child: AnimatedBuilder(
         animation: _controller,
-        builder: (_, __) {
+        builder: (_, _) {
           return CustomPaint(
             painter: StarPainter(_stars, _controller.value),
             size: MediaQuery.of(context).size,
@@ -64,7 +64,7 @@ class Star {
     return Star(
       position: Offset(random.nextDouble(), random.nextDouble()),
       size: random.nextDouble() * 2 + 1,
-      flickerSpeed: random.nextDouble() * 2 + 0.5, // tốc độ chớp
+      flickerSpeed: random.nextDouble() * 2,
     );
   }
 }
@@ -83,10 +83,9 @@ class StarPainter extends CustomPainter {
       final x = star.position.dx * size.width;
       final y = star.position.dy * size.height;
 
-      // opacity nhấp nháy theo sin
       final opacity = (sin(progress * pi * star.flickerSpeed) + 1) / 2;
 
-      paint.color = Colors.white.withOpacity(opacity);
+      paint.color = Colors.white.withValues(alpha: opacity);
 
       canvas.drawCircle(Offset(x, y), star.size, paint);
     }
