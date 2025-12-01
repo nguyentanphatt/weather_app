@@ -35,10 +35,6 @@ Create a `.env` file at the project root (same directory as `pubspec.yaml`). `.e
 
 Example `.env`:
 
-BASEURL=https://api.openweathermap.org/data/2.5/weather
-APIKEY=YOUR_OPENWEATHERMAP_API_KEY
-EMAIL=your-email@example.com
-
 - `BASEURL`: the base weather API endpoint. Example for OpenWeatherMap: `https://api.openweathermap.org/data/2.5/weather`.
 - `APIKEY`: your OpenWeatherMap API key.
 - `EMAIL`: an email address used as a user-agent header when requesting the Nominatim API (OpenStreetMap) — recommended by their usage policy to identify yourself.
