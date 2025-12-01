@@ -69,7 +69,7 @@ class TopContentWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(6),
                       decoration: const BoxDecoration(shape: BoxShape.circle),
                       child: const Icon(
-                        Icons.delete,
+                        Icons.close,
                         size: 30,
                         color: Colors.white,
                       ),
