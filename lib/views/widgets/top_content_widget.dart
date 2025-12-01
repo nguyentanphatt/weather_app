@@ -5,58 +5,88 @@ import 'package:weather_app/views/models/weather_models.dart';
 import 'package:weather_app/views/pages/search_page.dart';
 import 'package:weather_app/views/widgets/glass_card_widget.dart';
 
-final localTime = DateTime.now();
-int hour = localTime.hour;
-int minute = localTime.minute;
-
 class TopContentWidget extends StatelessWidget {
-  const TopContentWidget({super.key, required this.weather});
+  const TopContentWidget({
+    super.key,
+    required this.weather,
+    this.disable = false,
+    this.city = "",
+    this.onAdded,
+    this.isSaved = false,
+    this.savedJson,
+    this.onDelete,
+  });
   final WeatherModel weather;
-  String formatHour(int hour, int minute) {
-    int displayHour = hour % 12;
-    displayHour = displayHour == 0 ? 12 : displayHour;
-    String period = hour >= 12 ? "PM" : "AM";
-    String displayMinute = minute.toString().padLeft(2, '0');
-    return "$displayHour:$displayMinute $period";
-  }
+  final bool disable;
+  final String? city;
+  final VoidCallback? onAdded;
+  final bool isSaved;
+  final String? savedJson;
+  final ValueChanged<String>? onDelete;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          trailing: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return SearchPage();
+        if (disable == false)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return SearchPage();
+                        },
+                      ),
+                    );
+
+                    if (result == true) {
+                      onAdded?.call();
+                    }
                   },
+                  child: Icon(
+                    Icons.add,
+                    size: 30,
+                    color: Colors.white,
+                    weight: 10,
+                    grade: 200,
+                    opticalSize: 48,
+                  ),
                 ),
-              );
-            },
-            child: Icon(
-              Icons.add,
-              size: 30,
-              color: Colors.white,
-              weight: 10,
-              grade: 200,
-              opticalSize: 48,
+                if (isSaved)
+                  GestureDetector(
+                    onTap: () {
+                      if (savedJson != null) onDelete?.call(savedJson!);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: const Icon(
+                        Icons.delete,
+                        size: 22,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
-        ),
         Row(
           children: [
             Text(
-              "${weather.cityName}, ",
-              style: GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
-            ),
-            Text(
-              formatHour(hour, minute),
-              style: GoogleFonts.montserrat(fontSize: 16, color: Colors.white),
+              city == null || city!.isEmpty ? weather.cityName : city!,
+              style: GoogleFonts.montserrat(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -85,11 +115,36 @@ class TopContentWidget extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                weather.main,
-                style: GoogleFonts.montserrat(color: Colors.white),
+              Row(
+                children: [
+                  Image.network(
+                    'https://openweathermap.org/img/wn/${weather.icon}@2x.png',
+                    width: 30,
+                    height: 30,
+                    color: Colors.white,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, progress) {
+                      if (progress == null) return child;
+                      return SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.error);
+                    },
+                  ),
+                  Text(
+                    weather.main,
+                    style: GoogleFonts.montserrat(color: Colors.white),
+                  ),
+                ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
                 child: VerticalDivider(thickness: 1, color: Colors.white),
               ),
@@ -103,7 +158,7 @@ class TopContentWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
                 child: VerticalDivider(thickness: 1, color: Colors.white),
               ),
@@ -120,7 +175,7 @@ class TopContentWidget extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         WindChime(windSpeed: weather.windSpeed, size: 50),
       ],
     );

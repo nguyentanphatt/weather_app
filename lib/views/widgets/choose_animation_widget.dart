@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/views/animations/cloud_animation.dart';
+import 'package:weather_app/views/animations/fog_animation.dart';
 import 'package:weather_app/views/animations/rain_animation.dart';
 import 'package:weather_app/views/animations/snow_animation.dart';
 import 'package:weather_app/views/animations/star_animation.dart';
@@ -26,6 +27,11 @@ List<Widget> chooseAnimationWidgets(WeatherModel data, DateTime currentTime) {
       widgets.add(ThunderStormAnimation());
       break;
     case 'fog':
+      widgets.add(FogAnimation());
+      break;
+    case 'mist':
+      widgets.add(FogAnimation());
+      break;
     case 'drizzle':
       widgets.add(RainAnimation(rainDropCount: 30,));
       widgets.add(WaterDropletAnimation(dropletCount: 5));

@@ -10,8 +10,10 @@ class CloudAnimation extends StatefulWidget {
 }
 
 class _CloudAnimationState extends State<CloudAnimation>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
   late List<Cloud> _clouds;
 
   @override
@@ -23,26 +25,48 @@ class _CloudAnimationState extends State<CloudAnimation>
       duration: const Duration(seconds: 60),
     )..repeat();
 
+    // Fade controller - reversible để fade in/out
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+
     _clouds = List.generate(widget.cloudCount, (_) => Cloud.random());
+
+    // Delay rồi fade in
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        _fadeController.forward();
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (_, __) {
-          return CustomPaint(
-            painter: CloudPainter(_clouds, _controller.value),
-            size: MediaQuery.of(context).size,
-          );
-        },
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (_, _) {
+            return CustomPaint(
+              painter: CloudPainter(_clouds, _controller.value),
+              size: MediaQuery.of(context).size,
+            );
+          },
+        ),
       ),
     );
   }

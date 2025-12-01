@@ -12,7 +12,7 @@ class WindChime extends StatefulWidget {
 }
 
 class _WindChimeState extends State<WindChime>
-    with SingleTickerProviderStateMixin {
+  with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _swingAnimation;
 

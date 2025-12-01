@@ -10,7 +10,7 @@ class StarBlinkingAnimation extends StatefulWidget {
 }
 
 class _StarBlinkingAnimationState extends State<StarBlinkingAnimation>
-    with SingleTickerProviderStateMixin {
+  with TickerProviderStateMixin {
   late AnimationController _controller;
   late List<Star> _stars;
 

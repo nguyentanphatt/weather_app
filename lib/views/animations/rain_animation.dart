@@ -10,8 +10,10 @@ class RainAnimation extends StatefulWidget {
 }
 
 class _RainAnimationState extends State<RainAnimation>
-    with SingleTickerProviderStateMixin {
+  with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
   late List<RainDrop> _rainDrops;
   final Random _random = Random();
 
@@ -24,7 +26,25 @@ class _RainAnimationState extends State<RainAnimation>
       duration: const Duration(seconds: 2),
     )..repeat();
 
+    
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+
     _rainDrops = List.generate(widget.rainDropCount, (_) => _createRainDrop());
+
+    
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        _fadeController.forward();
+      }
+    });
   }
 
   RainDrop _createRainDrop() {
@@ -41,20 +61,24 @@ class _RainAnimationState extends State<RainAnimation>
   @override
   void dispose() {
     _controller.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (_, _) {
-          return CustomPaint(
-            size: MediaQuery.of(context).size,
-            painter: RainPainter(_rainDrops),
-          );
-        },
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (_, _) {
+            return CustomPaint(
+              size: MediaQuery.of(context).size,
+              painter: RainPainter(_rainDrops),
+            );
+          },
+        ),
       ),
     );
   }

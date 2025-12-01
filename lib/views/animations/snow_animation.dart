@@ -10,8 +10,10 @@ class SnowAnimation extends StatefulWidget {
 }
 
 class _SnowAnimationState extends State<SnowAnimation>
-    with SingleTickerProviderStateMixin {
+  with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
   late List<SnowFlake> _snowFlakes;
   final Random _random = Random();
 
@@ -24,10 +26,26 @@ class _SnowAnimationState extends State<SnowAnimation>
       duration: const Duration(seconds: 10),
     )..repeat();
 
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+
     _snowFlakes = List.generate(
       widget.snowFlakeCount,
       (_) => _createSnowFlake(),
     );
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        _fadeController.forward();
+      }
+    });
   }
 
   SnowFlake _createSnowFlake() {
@@ -46,21 +64,25 @@ class _SnowAnimationState extends State<SnowAnimation>
   @override
   void dispose() {
     _controller.dispose();
+     _fadeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (_, _) {
-          final progress = _controller.value;
-          return CustomPaint(
-            size: MediaQuery.of(context).size,
-            painter: SnowPainter(_snowFlakes, progress),
-          );
-        },
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (_, _) {
+            final progress = _controller.value;
+            return CustomPaint(
+              size: MediaQuery.of(context).size,
+              painter: SnowPainter(_snowFlakes, progress),
+            );
+          },
+        ),
       ),
     );
   }
@@ -132,7 +154,7 @@ class SnowPainter extends CustomPainter {
     // Vẽ hoa tuyết nhỏ
     if (flake.size > 4) {
       final detailPaint = Paint()
-        ..color = flake.color.withOpacity(0.8)
+        ..color = flake.color.withValues(alpha: 0.8)
         ..strokeWidth = 0.5
         ..strokeCap = StrokeCap.round;
 

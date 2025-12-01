@@ -10,7 +10,7 @@ class WaterDropletAnimation extends StatefulWidget {
 }
 
 class _WaterDropletAnimationState extends State<WaterDropletAnimation>
-    with SingleTickerProviderStateMixin {
+  with TickerProviderStateMixin {
   late AnimationController _controller;
   late List<WaterDroplet> _droplets;
 

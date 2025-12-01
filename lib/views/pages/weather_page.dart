@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-class WeatherPage extends StatelessWidget {
+class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key,
     required this.background,
     this.animations = const [],
@@ -13,13 +13,23 @@ class WeatherPage extends StatelessWidget {
   final Widget content;
 
   @override
+  State<WeatherPage> createState() => _WeatherPageState();
+}
+
+class _WeatherPageState extends State<WeatherPage>
+    with AutomaticKeepAliveClientMixin<WeatherPage> {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Stack(
         children: [
-          background,
-          ...animations,
-          content,
+          widget.background,
+          ...widget.animations,
+          widget.content,
         ],
       ),
     );

@@ -1,7 +1,16 @@
+class WeatherData {
+  final WeatherModel weather;
+  final String? cityName;
+  final String? savedJson;
+  WeatherData({required this.weather, this.cityName, this.savedJson});
+}
+
+
 class WeatherModel {
   final String cityName;
   final String main;
   final String description;
+  final String icon;
   final double temp;
   final double feelsLike;
   final double tempMin;
@@ -16,6 +25,7 @@ class WeatherModel {
     required this.cityName,
     required this.main,
     required this.description,
+    required this.icon,
     required this.temp,
     required this.feelsLike,
     required this.tempMin,
@@ -37,6 +47,7 @@ class WeatherModel {
       cityName: json['name'],
       main: weather['main'],
       description: weather['description'],
+      icon: weather['icon'],
       temp: (mainData['temp'] as num).toDouble(),
       feelsLike: (mainData['feels_like'] as num).toDouble(),
       tempMin: (mainData['temp_min'] as num).toDouble(),

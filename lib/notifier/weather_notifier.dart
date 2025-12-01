@@ -15,32 +15,32 @@ class WeatherNotifier extends StateNotifier<AsyncValue<WeatherModel>> {
 
   WeatherNotifier(this.repository) : super(const AsyncValue.loading());
 
-  Future<void> loadWeather() async {
+  Future<WeatherModel> loadWeather() async {
     try {
       state = const AsyncValue.loading();
-
       final position = await repository.getCurrentLocation();
       final weather = await repository.fetchWeather(
         position.latitude,
         position.longitude,
       );
-
       state = AsyncValue.data(weather);
+      return weather; // trả ra dữ liệu
     } catch (e, st) {
       state = AsyncValue.error(e, st);
+      rethrow;
     }
   }
 
-  Future<void> loadWeatherByLatAndLng(double lat, double lng) async {
+  Future<WeatherModel> loadWeatherByLatAndLng(double lat, double lng) async {
     try {
       state = const AsyncValue.loading();
-      final weather = await repository.fetchWeather(
-        lat, lng
-      );
-
+      final weather = await repository.fetchWeather(lat, lng);
       state = AsyncValue.data(weather);
+      return weather; // trả ra dữ liệu
     } catch (e, st) {
       state = AsyncValue.error(e, st);
+      rethrow;
     }
   }
+
 }

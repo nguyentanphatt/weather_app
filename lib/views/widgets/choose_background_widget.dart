@@ -3,7 +3,6 @@ import 'package:weather_app/views/backgrounds/background.dart';
 
 Widget chooseBackgroundWidget(DateTime currentTime) {
   final hour = currentTime.hour;
-  //final hour = 20;
   if (hour >= 5 && hour < 6) {
     return Background(
       firstColor: Color(0xFFFF8E72),
