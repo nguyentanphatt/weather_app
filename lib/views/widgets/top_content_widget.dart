@@ -29,14 +29,15 @@ class TopContentWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (disable == false)
+        if (!disable || isSaved)
           ListTile(
             contentPadding: EdgeInsets.zero,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                GestureDetector(
-                  onTap: () async {
+                if (!isSaved && !disable)
+                  GestureDetector(
+                    onTap: () async {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -65,12 +66,11 @@ class TopContentWidget extends StatelessWidget {
                       if (savedJson != null) onDelete?.call(savedJson!);
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.all(6),
                       decoration: const BoxDecoration(shape: BoxShape.circle),
                       child: const Icon(
                         Icons.delete,
-                        size: 22,
+                        size: 30,
                         color: Colors.white,
                       ),
                     ),

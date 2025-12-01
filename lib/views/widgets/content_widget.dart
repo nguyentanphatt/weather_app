@@ -25,13 +25,13 @@ class ContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 60.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TopContentWidget(
               weather: currentData.weather,
-              disable: true,
+              disable: currentPage != 0,
               city: currentData.cityName,
               onAdded: onAdded,
               isSaved: currentData.savedJson != null,

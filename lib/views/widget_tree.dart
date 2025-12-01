@@ -151,7 +151,35 @@ class _WidgetTreeState extends ConsumerState<WidgetTree> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final currentData = weatherList[_currentPage];
+    // Ensure we never index out of range if the list shrank (for example after delete)
+    final safeIndex = (_currentPage < 0)
+        ? 0
+        : (_currentPage >= weatherList.length ? weatherList.length - 1 : _currentPage);
+
+    final currentData = weatherList[safeIndex];
+
+    // If the internal _currentPage is out of date (for example we removed items) sync
+    // the page controller and state after this frame so the UI doesn't crash.
+    if (safeIndex != _currentPage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final target = safeIndex.clamp(0, weatherList.length - 1);
+        if (_pageController.hasClients) {
+          try {
+            _pageController.animateToPage(
+              target,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } catch (_) {
+            // ignore any controller errors during transition
+          }
+        }
+        setState(() {
+          _currentPage = target;
+        });
+      });
+    }
 
     return Scaffold(
       body: Stack(
