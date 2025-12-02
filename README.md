@@ -99,5 +99,3 @@ Then try launching the app again with `flutter run` or `flutter run -d <device-i
 
 - OpenWeatherMap API docs: https://openweathermap.org/api
 - Nominatim (OpenStreetMap) usage policy & search API: https://nominatim.org/release-docs/latest/api/Search/
-
-If you'd like, I can also add a sample `.env.example` file to the repo (without real keys) and update the README to include how to obtain an OpenWeatherMap API key step-by-step.
